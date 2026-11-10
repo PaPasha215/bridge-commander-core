@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+dist/
+build/
+*.egg-info/
+.venv/
+# never commit tokens or private configs
+token
+*.token
+config.local.json

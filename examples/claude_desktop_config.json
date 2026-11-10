@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "bridge-commander": {
+      "command": "python3",
+      "args": ["/absolute/path/to/bridge-commander.pyz", "serve"]
+    }
+  }
+}

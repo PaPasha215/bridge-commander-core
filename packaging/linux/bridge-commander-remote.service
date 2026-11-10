@@ -1,0 +1,23 @@
+# systemd user unit for the remote client (Linux). Install:
+#   cp bridge-commander-remote.service ~/.config/systemd/user/ && systemctl --user enable --now bridge-commander-remote
+# Sign in once first: python3 -I ~/.local/lib/bridge-commander/remote/bridge-commander.pyz remote --cloud URL [--fallback URL]
+# For start without login: loginctl enable-linger $USER
+[Unit]
+Description=Bridge Commander remote client (outgoing HTTPS to the cloud)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=%h/.config/bridge-commander/device.json
+
+[Service]
+ExecStart=/usr/bin/python3 -I %h/.local/lib/bridge-commander/remote/bridge-commander.pyz remote --no-browser
+Restart=on-failure
+RestartSec=30
+MemoryMax=300M
+CPUQuota=50%
+TasksMax=128
+NoNewPrivileges=yes
+PrivateTmp=yes
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

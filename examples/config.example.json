@@ -1,0 +1,19 @@
+{
+  "allowedDirectories": ["~/projects"],
+  "readOnly": false,
+  "fileReadLineLimit": 1000,
+  "auditLog": "~/.local/state/bridge-commander/audit.jsonl",
+  "http": {"host": "127.0.0.1", "port": 8765, "tokenFile": "~/.config/bridge-commander/token", "allowedOrigins": []},
+  "nodes": {
+    "build-box": {
+      "command": ["ssh", "-T", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "build-box",
+                  "python3 ~/bin/bridge-commander.pyz worker"],
+      "description": "Linux build server",
+      "timeoutMs": 60000
+    },
+    "nas": {
+      "command": ["ssh", "-T", "-o", "BatchMode=yes", "nas", "python3 ~/bin/bridge-commander.pyz --config ~/.config/bridge-commander/readonly.json worker"],
+      "description": "File server, read-only"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# systemd user unit: ~/.config/systemd/user/bridge-commander.service
+#   systemctl --user daemon-reload && systemctl --user enable --now bridge-commander
+[Unit]
+Description=Bridge Commander MCP server (HTTP on loopback)
+
+[Service]
+ExecStart=/usr/bin/python3 %h/bin/bridge-commander.pyz serve --transport http
+Restart=on-failure
+RestartSec=5
+UMask=0077
+
+[Install]
+WantedBy=default.target

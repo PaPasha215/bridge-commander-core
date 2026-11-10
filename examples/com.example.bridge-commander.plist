@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~/Library/LaunchAgents/com.example.bridge-commander.plist
+     launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.bridge-commander.plist
+     Replace /Users/YOU with your home directory. -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.example.bridge-commander</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/YOU/bin/bridge-commander.pyz</string>
+    <string>serve</string>
+    <string>--transport</string>
+    <string>http</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>Umask</key><integer>63</integer>
+  <key>StandardErrorPath</key><string>/Users/YOU/Library/Logs/bridge-commander.log</string>
+</dict>
+</plist>
