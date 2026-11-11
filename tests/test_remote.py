@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import stat
@@ -178,6 +179,31 @@ class Failover(unittest.TestCase):
                          check=lambda u: self.fail("no health checks without fallback"),
                          journal=remote.ReceiptJournal(":memory:", "test"))
         self.assertEqual(attempts, [self.P + "/device/poll"])
+
+    def test_poll_http_errors_log_status_without_payload_or_execution(self):
+        stop, out, box = threading.Event(), io.StringIO(), mock.Mock()
+        secret = "SENSITIVE_RESPONSE_BODY"
+        body = {"error": secret, "url": "https://private.invalid/token?secret=hidden",
+                "calls": [{"id": "must-not-run", "tool": "write_file", "args": {}}]}
+        journal = remote.ReceiptJournal(":memory:", "http-diagnostics")
+        try:
+            with mock.patch.object(remote, "_post", side_effect=[(code, body) for code in (403, 429, 503, 401)]), \
+                    mock.patch.object(stop, "wait", return_value=False) as wait:
+                with self.assertRaises(remote.Revoked):
+                    remote.serve(box, {"cloud": self.P, "device_token": "SENSITIVE_DEVICE_TOKEN"},
+                                 out=out, stop=stop, journal=journal)
+            self.assertEqual(wait.call_args_list, [mock.call(1), mock.call(2), mock.call(4)])
+            self.assertTrue(stop.is_set())  # 401 still stops instead of retrying.
+            box.call.assert_not_called()
+            self.assertEqual(journal.pending(), [])
+            log = out.getvalue()
+            for code, delay in ((403, 1), (429, 2), (503, 4)):
+                self.assertRegex(log, r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z cloud poll failed "
+                                 r"\(HTTP %d\); retrying in %ds" % (code, delay))
+            for private in (secret, "SENSITIVE_DEVICE_TOKEN", "private.invalid", "?secret=", "/device/poll"):
+                self.assertNotIn(private, log)
+        finally:
+            journal.close()
 
 
 if __name__ == "__main__":

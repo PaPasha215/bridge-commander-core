@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1 — 2026-11-11
+
+- Report UTC time, HTTP status and retry delay when the cloud refuses a device poll. Response bodies and credentials are not included in this diagnostic; retry and execution rules are unchanged.
+
 ## 1.3.0 — public-readiness candidate, 2026-11-10
 
 - Metadata-only device receipts: claim and acknowledge before execution; preserve UNKNOWN after a crash and never automatically replay an effect.

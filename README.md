@@ -65,7 +65,7 @@ python3 -I bridge-commander.pyz init --directory ~/BridgeFiles &&
 python3 -I bridge-commander.pyz remote --cloud https://bridgecommander.dev
 ```
 
-Verify the downloaded 1.3.0 artifact against [SHA256SUMS](SHA256SUMS). Keep the MIT [LICENSE](LICENSE) with redistributed copies. Setup stops if a download or initialization fails. Inspect an existing configuration before changing it; do not add `--force` to this sequence.
+Verify the downloaded 1.3.1 artifact against [SHA256SUMS](SHA256SUMS). Keep the MIT [LICENSE](LICENSE) with redistributed copies. Setup stops if a download or initialization fails. Inspect an existing configuration before changing it; do not add `--force` to this sequence.
 
 The machine connects out over HTTPS, you confirm a code in the browser, and the chat connects to the cloud's MCP
 URL with OAuth. The device still enforces its own config file. `remote --logout` forgets the device credentials;
@@ -170,7 +170,7 @@ MIT — see [LICENSE](LICENSE).
 CI: [ci/github-actions-test.yml](ci/github-actions-test.yml) runs the tests on Linux and macOS. To enable it,
 copy it to `.github/workflows/test.yml` (pushing workflow files needs a token with the `workflow` scope).
 
-## First free public beta — client 1.3.0
+## Free public beta — client 1.3.1
 
 The initial macOS/Linux
 path is a foreground Python `.pyz` in a terminal, a fresh private configuration and

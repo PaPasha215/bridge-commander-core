@@ -291,6 +291,8 @@ def serve(toolbox, creds, out=sys.stderr, stop=None, check=healthy, clock=time.m
                 stop.set()
                 raise Revoked()
             if status != 200:
+                log("%s cloud poll failed (HTTP %d); retrying in %ds" %
+                    (time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), status, backoff))
                 stop.wait(backoff)
                 backoff = min(backoff * 2, 60)
                 continue
